@@ -1,0 +1,161 @@
+# Active Directory Scripts Collection
+
+A curated collection of PowerShell scripts for managing and automating Active Directory Domain Services (AD DS) tasks.
+
+## Table of Contents
+- [Domain Controller Management](#domain-controller-management)
+- [User and Computer Management](#user-and-computer-management)
+- [Group Policy Management](#group-policy-management)
+- [FSMO Role Management](#fsmo-role-management)
+- [Permission Management](#permission-management)
+- [PowerShell Remoting](#powershell-remoting)
+- [Virtualization with Hyper-V](#virtualization-with-hyper-v)
+- [Backup and Recovery](#backup-and-recovery)
+- [High Availability and Failover Clustering](#high-availability-and-failover-clustering)
+- [Security Management](#security-management)
+
+## Domain Controller Management
+
+### Install AD DS Role
+```powershell
+# Install AD DS role with management tools
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+```
+
+### Create a New Forest/Domain
+```powershell
+# Create a new forest and domain
+Install-ADDSForest -DomainName "contoso.com" -DomainNetbiosName "CONTOSO" -InstallDns
+```
+
+## User and Computer Management
+
+### Query Disabled User Accounts
+```powershell
+# Get all disabled user accounts
+Get-ADUser -Filter {Enabled -eq $false}
+```
+
+### Find Inactive Computers
+```powershell
+# Find computers that haven't logged in for 90 days
+$time = (Get-Date).AddDays(-90)
+Get-ADComputer -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp
+```
+
+## Group Policy Management
+
+### Create a New GPO
+```powershell
+# Create a new GPO
+New-GPO -Name "Security Settings"
+```
+
+### Link GPO to an OU
+```powershell
+# Link a GPO to an OU
+New-GPLink -Name "Security Settings" -Target "OU=Sales,DC=contoso,DC=com"
+```
+
+## FSMO Role Management
+
+### View Domain FSMO Roles
+```powershell
+# View FSMO role holders for domain
+Get-ADDomain | Select-Object PDCEmulator, RIDMaster, InfrastructureMaster
+```
+
+### View Forest FSMO Roles
+```powershell
+# View FSMO role holders for forest
+Get-ADForest | Select-Object SchemaMaster, DomainNamingMaster
+```
+
+## Permission Management
+
+### Grant Password Reset Permissions
+```powershell
+# Grant HelpDesk permission to reset passwords in the Sales OU
+dsacls "OU=Sales,DC=contoso,DC=com" /G "CONTOSO\HelpDesk:CA;Reset Password;User"
+```
+
+## PowerShell Remoting
+
+### Enable PowerShell Remoting
+```powershell
+# Enable PowerShell remoting
+Enable-PSRemoting -Force
+```
+
+### Create Remote Session
+```powershell
+# Remote session to a server
+Enter-PSSession -ComputerName Server01
+```
+
+## Virtualization with Hyper-V
+
+### Install Hyper-V
+```powershell
+# Install Hyper-V with management tools
+Install-WindowsFeature -Name Hyper-V -IncludeManagementTools -Restart
+```
+
+## Backup and Recovery
+
+### Install Windows Server Backup
+```powershell
+# Install Windows Server Backup feature
+Install-WindowsFeature Windows-Server-Backup
+```
+
+### Create One-Time Backup
+```powershell
+# Create a one-time backup to a specific location
+wbadmin start backup -backupTarget:E: -include:C: -allCritical
+```
+
+## High Availability and Failover Clustering
+
+### Install Failover Clustering
+```powershell
+# Install Failover Clustering feature
+Install-WindowsFeature -Name Failover-Clustering -IncludeManagementTools
+```
+
+### Create New Cluster
+```powershell
+# Create a new cluster
+New-Cluster -Name Cluster1 -Node Server1,Server2 -StaticAddress 192.168.1.100
+```
+
+## Security Management
+
+### Enable Windows Defender Credential Guard
+```powershell
+# Enable Windows Defender Credential Guard
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\LSA" -Name "LsaCfgFlags" -Value 1 -Type DWORD
+```
+
+### Check Windows Defender Status
+```powershell
+# Check Windows Defender status
+Get-MpComputerStatus
+```
+Azure Integration Points
+Key Services:
+
+Azure Active Directory
+Azure File Sync
+Azure Backup
+Azure Arc
+Azure Update Management
+
+Configuration Examples:
+
+# Install Azure File Sync agent
+msiexec /i AzureFileSync.msi /qn
+
+# Register Azure Arc server
+azcmagent connect --resource-group "myResourceGroup" --tenant-id "myTenantID" --subscription-id "mySubscriptionID" --location "westus2" --tags "key=value"
+
