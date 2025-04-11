@@ -86,7 +86,7 @@ Scripts for enhancing Active Directory security:
 Enabling Windows Defender Credential Guard
 Checking security status
 
-Azure Integration
+# Azure Integration
 Scripts for integrating on-premises Active Directory with Azure services:
 
 Azure Active Directory connection
@@ -94,17 +94,3 @@ Azure File Sync configuration
 Azure Backup implementation
 Azure Arc server registration
 Azure Update Management
-
-Usage Examples
-Each script is documented with comments explaining its purpose and usage. Here's an example of how to use the script for finding inactive computers:
-powershell
-
-# Find computers that haven't logged in for 90 days
-$time = (Get-Date).AddDays(-90)
-Get-ADComputer -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp
-
-Contributing
-Contributions to this script collection are welcome! Please feel free to submit pull requests with your own useful Active Directory management scripts.
-
-Microsoft documentation for Active Directory PowerShell cmdlets
-The PowerShell community for sharing best practices
